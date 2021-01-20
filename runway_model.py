@@ -21,17 +21,17 @@ preprocess = transforms.Compose([
 
 @runway.setup
 def setup():
-  return models.squeezenet1_1(pretrained=True)
+   return models.squeezenet1_1(pretrained=True)
 
-@runway.command('classify', inputs={'photo': image}, outputs={'label': text})
-def classify(model, inputs):
-    img = inputs['photo']
-    img_tensor = preprocess(img)
-    img_tensor.unsqueeze_(0)
-    img_variable = Variable(img_tensor)
-    fc_out = model(img_variable)
-    label = labels[str(fc_out.data.numpy().argmax())]
-    return {'label': label}
+@runway.command('classify', inputs={ 'photo': image() }, outputs={ 'label': text() })
+def classify(model, input):
+   img = input['photo']
+   img_tensor = preprocess(img)
+   img_tensor.unsqueeze_(0)
+   img_variable = Variable(img_tensor)
+   fc_out = model(img_variable)
+   label = labels[str(fc_out.data.numpy().argmax())]
+   return { 'label': label }
 
 if __name__ == '__main__':
-    runway.run()
+   runway.run()
